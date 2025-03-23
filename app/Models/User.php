@@ -47,4 +47,9 @@ class User extends Authenticatable
             'isAdmin' => 'boolean'
         ];
     }
+
+    public function emprunts()
+{
+    return $this->hasMany(Emprunt::class);
+}
 }

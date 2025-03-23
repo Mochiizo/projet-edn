@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\PackController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -23,8 +24,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('reservation');
 });
 
-// Route::get('/reservation', [ReservationController::class, 'showForm'])->name('reservation.form');
-// Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
+
+Route::get('/packs', [PackController::class, 'index']);
+Route::delete('/account/{id}', [AccountController::class, 'delete_account']);
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
