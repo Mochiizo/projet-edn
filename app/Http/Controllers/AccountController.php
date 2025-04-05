@@ -17,4 +17,9 @@ class AccountController extends Controller
             'users' => $users,
         ]);
     }
+
+    public function delete_account(string $id){
+        User::destroy($id);
+        return redirect()->route('account')->with('success', 'Utilisateur supprimé avec succès');
+    }
 }

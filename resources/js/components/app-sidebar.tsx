@@ -21,6 +21,7 @@ export function AppSidebar() {
             href: '/account',
             icon: User,
         },
+
         {
             title: 'Réservation',
             href: '/reservation',

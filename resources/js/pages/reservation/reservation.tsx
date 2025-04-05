@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
@@ -49,38 +50,59 @@ export default function Reservation() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Reservation" />
-            <div className="mx-auto mt-10 max-w-lg rounded-lg bg-red-700 p-6 shadow">
-                <h2 className="mb-4 text-xl font-semibold">Faire une réservation</h2>
-                <form onSubmit={submit} className="space-y-4">
-                    {/* Sélection du pack */}
-                    <Select onValueChange={(value) => setData('pack_id', value)}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner un pack disponible" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {packs &&
-                                packs.map((pack) => (
-                                    <SelectItem key={pack.id} value={pack.id.toString()}>
-                                        {pack.nom}
-                                    </SelectItem>
-                                ))}
-                        </SelectContent>
-                    </Select>
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                    <div className="border-sidebar-border/70 dark:border-sidebar-border relative overflow-hidden rounded-xl border p-6">
+                        <h2 className="mb-6 text-xl font-semibold">Faire une réservation</h2>
+                        <form onSubmit={submit} className="space-y-6">
+                            {/* Sélection du pack */}
+                            <div className="space-y-2">
+                                <label className="text-sm leading-none font-medium">Pack</label>
+                                <Select onValueChange={(value) => setData('pack_id', value)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Sélectionner un pack disponible" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {packs?.map((pack) => (
+                                            <SelectItem key={pack.id} value={pack.id.toString()}>
+                                                {pack.nom}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                    {/* Sélection des dates */}
-                    <Calendar
-                        mode="range"
-                        selected={data.date_debut && data.date_fin ? { from: new Date(data.date_debut), to: new Date(data.date_fin) } : undefined}
-                        onSelect={(range: DateRange | undefined) => {
-                            setData('date_debut', range?.from ? range.from.toISOString() : null);
-                            setData('date_fin', range?.to ? range.to.toISOString() : null);
-                        }}
-                    />
+                            {/* Sélection des dates */}
+                            <div className="space-y-2">
+                                <label className="text-sm leading-none font-medium">Dates</label>
+                                <div className="rounded-md border p-2">
+                                    <Calendar
+                                        mode="range"
+                                        numberOfMonths={1}
+                                        selected={
+                                            data.date_debut && data.date_fin
+                                                ? { from: new Date(data.date_debut), to: new Date(data.date_fin) }
+                                                : undefined
+                                        }
+                                        onSelect={(range: DateRange | undefined) => {
+                                            setData('date_debut', range?.from ? range.from.toISOString() : null);
+                                            setData('date_fin', range?.to ? range.to.toISOString() : null);
+                                        }}
+                                        className="w-full"
+                                    />
+                                </div>
+                            </div>
 
-                    <Button type="submit" disabled={processing} className="w-full">
-                        Réserver
-                    </Button>
-                </form>
+                            {/* Bouton de soumission */}
+                            <Button type="submit" disabled={processing} className="mt-4 w-full">
+                                {processing ? 'Traitement...' : 'Réserver'}
+                            </Button>
+                        </form>
+                    </div>
+                    <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
+                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                    </div>
+                </div>
             </div>
         </AppLayout>
     );
