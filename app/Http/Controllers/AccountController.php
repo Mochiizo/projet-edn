@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\User; 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
     public function index()
     {
         // Récupère tous les utilisateurs avec pagination
-        $users = User::paginate(3);
+        $users = User::paginate(10);
+        $totalUsers = User::count();
 
         return Inertia::render('dashboard/account', [
             'users' => $users,
@@ -29,7 +31,7 @@ class AccountController extends Controller
     $user->update($validated);
 
     return response()->json(['message' => 'Utilisateur mis à jour.']);
-    }
+}
 
     public function destroy(User $user)
 {

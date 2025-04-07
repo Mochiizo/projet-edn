@@ -28,6 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/packs', [PackController::class, 'index']);
 
 // Accounts / Users
+Route::put('/account/{user}', [AccountController::class, 'update'])->name('account.update');
 Route::delete('/account/{user}', [AccountController::class, 'destroy'])->name('account.destroy');
 
 require __DIR__.'/settings.php';
