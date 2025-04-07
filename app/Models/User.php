@@ -49,7 +49,7 @@ class User extends Authenticatable
     }
 
     public function emprunts()
-{
-    return $this->hasMany(Emprunt::class);
-}
+    {
+        return $this->hasMany(Emprunt::class);
+    }
 }
