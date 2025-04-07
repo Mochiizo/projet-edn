@@ -61,34 +61,7 @@ export default function Reservation() {
       <div className="flex h-full flex-col gap-6 p-4">
         <h1 className="text-2xl font-bold">Réserver un pack</h1>
         <div className="grid auto-rows-min gap-6 md:grid-cols-3">
-          {/* Colonne 1 : Historique */}
-          <div className="border border-border dark:border-sidebar-border rounded-xl p-4 bg-white dark:bg-black/20 shadow-sm">
-            <h2 className="text-lg font-semibold mb-3">Mes réservations</h2>
-            <ul className="space-y-3">
-              {reservations.length > 0 ? reservations.map((r) => (
-                <li key={r.id} className="border border-muted rounded-lg p-3 flex items-center gap-4">
-                  {r.status === 'en cours' ? (
-                    <span className="text-yellow-400">🕒</span>
-                  ) : (
-                    <span className="text-green-500">✅</span>
-                  )}
-                  <div>
-                    <p className="font-semibold">{r.pack.nom}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(r.date_debut).toLocaleDateString()} → {new Date(r.date_fin).toLocaleDateString()}
-                    </p>
-                    <p className={`text-xs mt-1 ${r.status === 'en cours' ? 'text-yellow-500' : 'text-green-500'}`}>
-                      {r.status}
-                    </p>
-                  </div>
-                </li>
-              )) : (
-                <li className="text-sm text-muted-foreground">Aucune réservation trouvée.</li>
-              )}
-            </ul>
-          </div>
-
-          {/* Colonne 2-3 : Formulaire */}
+          {/* Colonne 1-2 : Formulaire */}
           <div className="md:col-span-2 border border-border dark:border-sidebar-border rounded-xl p-6 bg-white dark:bg-black/20 shadow-sm">
             <form onSubmit={submit} className="space-y-6">
               <div>
@@ -166,6 +139,33 @@ export default function Reservation() {
                 {processing ? 'Traitement...' : 'Réserver'}
               </Button>
             </form>
+          </div>
+
+          {/* Colonne 3 : Historique */}
+          <div className="border border-border dark:border-sidebar-border rounded-xl p-4 bg-white dark:bg-black/20 shadow-sm">
+            <h2 className="text-lg font-semibold mb-3">Mes réservations</h2>
+            <ul className="space-y-3">
+              {reservations.length > 0 ? reservations.map((r) => (
+                <li key={r.id} className="border border-muted rounded-lg p-3 flex items-center gap-4">
+                  {r.status === 'en cours' ? (
+                    <span className="text-yellow-400">🕒</span>
+                  ) : (
+                    <span className="text-green-500">✅</span>
+                  )}
+                  <div>
+                    <p className="font-semibold">{r.pack.nom}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(r.date_debut).toLocaleDateString()} → {new Date(r.date_fin).toLocaleDateString()}
+                    </p>
+                    <p className={`text-xs mt-1 ${r.status === 'en cours' ? 'text-yellow-500' : 'text-green-500'}`}>
+                      {r.status}
+                    </p>
+                  </div>
+                </li>
+              )) : (
+                <li className="text-sm text-muted-foreground">Aucune réservation trouvée.</li>
+              )}
+            </ul>
           </div>
         </div>
       </div>
