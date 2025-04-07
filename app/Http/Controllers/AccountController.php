@@ -15,8 +15,20 @@ class AccountController extends Controller
 
         return Inertia::render('dashboard/account', [
             'users' => $users,
-           response() -> json(['message' => 'Récupération des Utilisateurs']),
+            'totalUsers' => $totalUsers,
         ]);
+    }
+
+    public function update(Request $request, User $user)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+    ]);
+
+    $user->update($validated);
+
+    return response()->json(['message' => 'Utilisateur mis à jour.']);
     }
 
     public function destroy(User $user)
