@@ -1,8 +1,8 @@
 import PaginationUser from '@/components/pagination-table'; // Import du composant PaginationUser
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BreadcrumbItem } from '@/types';
-import { router, usePage } from '@inertiajs/react';
-import DeleteAccountButton from './button-delete-account';
+import { usePage } from '@inertiajs/react';
+import DeleteUserButton from './delete-user-button';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -10,18 +10,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/account',
     },
 ];
-
-const handleDelete = (userId: number) => {
-    if (confirm('Voulez-vous vraiment supprimer cet utilisateur ?')) {
-        router.delete(`/account/${userId}`, {
-            onSuccess: () => {
-                alert('Utilisateur supprimé avec succès !');
-                router.visit('/account'); // Redirect to the account page
-            },
-            onError: () => alert('Erreur lors de la suppression'),
-        });
-    }
-};
 
 export default function Account() {
     const { users } = usePage().props as unknown as {
@@ -59,7 +47,10 @@ export default function Account() {
                                         <TableCell className="text-right">{user.isAdmin ? '✅ Oui' : '❌ Non'}</TableCell>
                                         <TableCell className="text-center">Boutton Modifier</TableCell>
                                         <TableCell className="text-center">
-                                            <DeleteAccountButton userId={user.id} />
+                                            <DeleteUserButton
+                                                userId={user.id}
+                                                onDeleted={() => window.location.reload()} // simple refresh
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}

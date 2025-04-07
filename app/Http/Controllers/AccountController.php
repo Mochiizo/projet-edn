@@ -15,11 +15,14 @@ class AccountController extends Controller
 
         return Inertia::render('dashboard/account', [
             'users' => $users,
+           response() -> json(['message' => 'Récupération des Utilisateurs']),
         ]);
     }
 
-    public function delete_account(string $id){
-        User::destroy($id);
-        return redirect()->route('account')->with('success', 'Utilisateur supprimé avec succès');
-    }
+    public function destroy(User $user)
+{
+    $user->delete();
+
+    return response()->json(['message' => 'Utilisateur supprimé.']);
+}
 }
