@@ -1,8 +1,9 @@
 import PaginationUser from '@/components/pagination-table'; // Import du composant PaginationUser
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BreadcrumbItem } from '@/types';
-import { router, usePage } from '@inertiajs/react';
-import DeleteAccountButton from './button-delete-account';
+import { usePage } from '@inertiajs/react';
+import DeleteUserButton from './delete-user-button';
+import SheetUser from './sheet-user';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -11,24 +12,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const handleDelete = (userId: number) => {
-    if (confirm('Voulez-vous vraiment supprimer cet utilisateur ?')) {
-        router.delete(`/account/${userId}`, {
-            onSuccess: () => {
-                alert('Utilisateur supprimé avec succès !');
-                router.visit('/account'); // Redirect to the account page
-            },
-            onError: () => alert('Erreur lors de la suppression'),
-        });
-    }
-};
-
 export default function Account() {
-    const { users } = usePage().props as unknown as {
+    const { users, totalUsers } = usePage().props as unknown as {
         users: {
             data: { id: number; name: string; email: string; isAdmin: boolean }[];
             links: { url: string | null; label: string; active: boolean }[];
         };
+        totalUsers: number;
     };
 
     return (
@@ -57,9 +47,15 @@ export default function Account() {
                                         <TableCell>{user.name}</TableCell>
                                         <TableCell>{user.email}</TableCell>
                                         <TableCell className="text-right">{user.isAdmin ? '✅ Oui' : '❌ Non'}</TableCell>
-                                        <TableCell className="text-center">Boutton Modifier</TableCell>
                                         <TableCell className="text-center">
-                                            <DeleteAccountButton userId={user.id} />
+                                            {/*<EditUserForm user={user} onSaved={() => window.location.reload()} />*/}
+                                            <SheetUser user={user} onSaved={() => window.location.reload()} />
+                                        </TableCell>
+                                        <TableCell className="text-center">
+                                            <DeleteUserButton
+                                                userId={user.id}
+                                                onDeleted={() => window.location.reload()} // simple refresh
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -67,7 +63,7 @@ export default function Account() {
                             <TableFooter>
                                 <TableRow>
                                     <TableCell colSpan={5}>Total des utilisateurs</TableCell>
-                                    <TableCell className="text-right">{users.data.length}</TableCell>
+                                    <TableCell className="text-right">{totalUsers}</TableCell>
                                 </TableRow>
                             </TableFooter>
                         </Table>

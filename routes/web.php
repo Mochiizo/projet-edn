@@ -37,8 +37,10 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('/packs', [PackController::class, 'index']);
-Route::delete('/account/{id}', [AccountController::class, 'delete_account']);
 
+// Accounts / Users
+Route::put('/account/{user}', [AccountController::class, 'update'])->name('account.update');
+Route::delete('/account/{user}', [AccountController::class, 'destroy'])->name('account.destroy');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

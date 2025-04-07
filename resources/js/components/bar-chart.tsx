@@ -41,7 +41,13 @@ export default function ChartBar() {
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value: string) => value.slice(0, 3)}
+                            tickFormatter={(value: unknown, index: number) => {
+                                // Solution la plus sûre avec vérification de type
+                                if (typeof value === 'string') {
+                                    return value.slice(0, 3); // Retourne les 3 premières lettres
+                                }
+                                return String(value);
+                            }}
                         />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
                         <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
