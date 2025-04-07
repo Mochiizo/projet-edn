@@ -26,12 +26,7 @@ export default function DeleteUserButton({ userId, onDeleted }: DeleteUserButton
 
             if (response.ok) {
                 toast.success('Utilisateur supprimé avec succès.');
-
-                // Appel du callback s’il existe
                 onDeleted?.();
-
-                // Forcer le rafraîchissement de la page
-                window.location.reload();
             } else {
                 toast.error('Erreur lors de la suppression.');
             }
