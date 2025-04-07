@@ -31,7 +31,7 @@ Dans laragon veillez bien à mettre le bon chemin Root et
 dans le dossier public le fichier index.php y est.
 "www/nomp_projet_/public"
 
-3. ** Installation des dépendances**
+3. **Installation des dépendances**
 Être à la racine du projet "www/edn-projet"
 ```bash
 npm install
