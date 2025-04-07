@@ -11,6 +11,7 @@ class Emprunt extends Model
 
     protected $fillable = ['user_id', 'pack_id', 'date_debut', 'date_fin', 'status'];
 
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -15,7 +15,7 @@ Route::middleware(['auth', 'verified', \App\Http\Middleware\IsAdmin::class])->gr
         return Inertia::render('dashboard/dashboard');
     })->name('dashboard');
 
-     Route::get('account', [AccountController::class, 'index'])->name('account');
+    Route::get('account', [AccountController::class, 'index'])->name('account');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -24,10 +24,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('reservation');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
+    Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
+});
+
+/*
+Route::middleware(['auth'])->group(function () {
+    Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
+    Route::post('/reservation/{pack}', [ReservationController::class, 'store'])->name('reservation.store');
+});*/
+
 
 Route::get('/packs', [PackController::class, 'index']);
 Route::delete('/account/{id}', [AccountController::class, 'delete_account']);
 
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
