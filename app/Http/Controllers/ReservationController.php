@@ -13,7 +13,14 @@ class ReservationController extends Controller
 {
     public function index()
     {
-        return Inertia::render('reservation/reservation');
+        $reservations = Emprunt::with('pack')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return Inertia::render('reservation/reservation', [
+            'reservations' => $reservations,
+        ]);
     }
 
     public function store(Request $request): RedirectResponse

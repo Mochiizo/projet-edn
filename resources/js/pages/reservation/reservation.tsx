@@ -4,15 +4,23 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 
-type Pack = {
+interface Pack {
   id: number;
   nom: string;
-};
+}
+
+interface Emprunt {
+  id: number;
+  pack: { nom: string };
+  date_debut: string;
+  date_fin: string;
+  status: 'en cours' | 'rendu';
+}
 
 export default function Reservation() {
   const { data, setData, post, processing, reset, errors } = useForm({
@@ -20,6 +28,9 @@ export default function Reservation() {
     date_debut: null as string | null,
     date_fin: null as string | null,
   });
+
+  const { props } = usePage<{ reservations: Emprunt[] }>();
+  const reservations = props.reservations;
 
   const [packs, setPacks] = useState<Pack[]>([]);
 
@@ -50,9 +61,36 @@ export default function Reservation() {
       <div className="flex h-full flex-col gap-6 p-4">
         <h1 className="text-2xl font-bold">Réserver un pack</h1>
         <div className="grid auto-rows-min gap-6 md:grid-cols-3">
-          <div className="border border-border dark:border-sidebar-border rounded-xl p-6 bg-white dark:bg-black/20 shadow-sm">
+          {/* Colonne 1 : Historique */}
+          <div className="border border-border dark:border-sidebar-border rounded-xl p-4 bg-white dark:bg-black/20 shadow-sm">
+            <h2 className="text-lg font-semibold mb-3">Mes réservations</h2>
+            <ul className="space-y-3">
+              {reservations.length > 0 ? reservations.map((r) => (
+                <li key={r.id} className="border border-muted rounded-lg p-3 flex items-center gap-4">
+                  {r.status === 'en cours' ? (
+                    <span className="text-yellow-400">🕒</span>
+                  ) : (
+                    <span className="text-green-500">✅</span>
+                  )}
+                  <div>
+                    <p className="font-semibold">{r.pack.nom}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(r.date_debut).toLocaleDateString()} → {new Date(r.date_fin).toLocaleDateString()}
+                    </p>
+                    <p className={`text-xs mt-1 ${r.status === 'en cours' ? 'text-yellow-500' : 'text-green-500'}`}>
+                      {r.status}
+                    </p>
+                  </div>
+                </li>
+              )) : (
+                <li className="text-sm text-muted-foreground">Aucune réservation trouvée.</li>
+              )}
+            </ul>
+          </div>
+
+          {/* Colonne 2-3 : Formulaire */}
+          <div className="md:col-span-2 border border-border dark:border-sidebar-border rounded-xl p-6 bg-white dark:bg-black/20 shadow-sm">
             <form onSubmit={submit} className="space-y-6">
-              {/* Pack select */}
               <div>
                 <label className="text-sm font-medium">Pack</label>
                 <Select onValueChange={(value) => setData('pack_id', value)}>
@@ -70,7 +108,6 @@ export default function Reservation() {
                 {errors.pack_id && <p className="text-red-500 text-sm mt-1">{errors.pack_id}</p>}
               </div>
 
-              {/* Date de début */}
               <div>
                 <label className="text-sm font-medium">Date de début</label>
                 <Popover>
@@ -92,14 +129,12 @@ export default function Reservation() {
                       onSelect={(date) => {
                         setData('date_debut', date ? date.toISOString().slice(0, 19).replace('T', ' ') : '');
                       }}
-
                     />
                   </PopoverContent>
                 </Popover>
                 {errors.date_debut && <p className="text-red-500 text-sm mt-1">{errors.date_debut}</p>}
               </div>
 
-              {/* Date de fin */}
               <div>
                 <label className="text-sm font-medium">Date de fin</label>
                 <Popover>
@@ -121,7 +156,6 @@ export default function Reservation() {
                       onSelect={(date) => {
                         setData('date_fin', date ? date.toISOString().slice(0, 19).replace('T', ' ') : '');
                       }}
-
                     />
                   </PopoverContent>
                 </Popover>
@@ -132,10 +166,6 @@ export default function Reservation() {
                 {processing ? 'Traitement...' : 'Réserver'}
               </Button>
             </form>
-          </div>
-
-          <div className="border border-border dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl">
-            <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
           </div>
         </div>
       </div>
