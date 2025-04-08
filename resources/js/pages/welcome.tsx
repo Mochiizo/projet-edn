@@ -49,24 +49,24 @@ export default function Welcome() {
                                 <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-center lg:justify-between">
                                     <div className="max-w-xl text-center lg:text-left">
                                         <h2 className="text-3xl font-bold tracking-tight text-[#1b1b18] sm:text-4xl dark:text-white">
-                                            Boost Your Productivity with <span className="text-[#f53003] dark:text-[#FF4433]">MyApp</span>
+                                            Gérez vos emprunts tech avec <span className="text-[#f53003] dark:text-[#FF4433]">TechLoan</span>
                                         </h2>
                                         <p className="mt-4 text-lg text-[#1b1b18]/90 dark:text-white/80">
-                                            Simplify your workflow, collaborate in real-time, and achieve more with our powerful tools built for
-                                            developers and teams.
+                                            Optimisez la circulation de votre matériel informatique, suivez les emprunts en temps réel et gardez le
+                                            contrôle complet de votre parc d'ordinateurs.
                                         </p>
                                         <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
                                             <Link
                                                 href={auth.user ? route('dashboard') : route('register')}
                                                 className="inline-flex items-center justify-center rounded-md bg-[#f53003] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#c72100] dark:bg-[#FF4433] dark:hover:bg-[#e03a2a]"
                                             >
-                                                🚀 Get Started
+                                                🚀 Commencer
                                             </Link>
                                             <Link
                                                 href="#features"
                                                 className="inline-flex items-center justify-center rounded-md border border-white/30 px-6 py-3 text-sm font-semibold hover:bg-white/20 dark:border-white/20"
                                             >
-                                                Learn more
+                                                Apprendre plus
                                             </Link>
                                         </div>
                                     </div>
@@ -107,27 +107,44 @@ export default function Welcome() {
                             {/* Features Section */}
                             <section id="features" className="py-16">
                                 <div className="mx-auto max-w-2xl text-center">
-                                    <h2 className="text-3xl font-bold tracking-tight text-[#1b1b18] dark:text-white">Powerful features</h2>
+                                    <h2 className="text-3xl font-bold tracking-tight text-[#1b1b18] dark:text-white">
+                                        {' '}
+                                        Fonctionnalités clés pour votre gestion d'emprunts
+                                    </h2>
                                     <p className="mt-4 text-lg text-[#1b1b18]/90 dark:text-white/80">
-                                        Everything you need to boost your productivity
+                                        Tous les outils nécessaires pour optimiser le suivi de votre matériel informatique
                                     </p>
                                 </div>
                                 <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
                                     {[
                                         {
                                             icon: '⚡',
-                                            title: 'Fast & Lightweight',
-                                            description: 'Built with performance in mind, loads in seconds and runs smoothly on all devices.',
+                                            title: 'Gestion rapide des emprunts',
+                                            description:
+                                                "Processus d'emprunt et de retour d'ordinateurs optimisé pour gérer le flux de matériel en temps réel.",
                                         },
                                         {
                                             icon: '🔐',
-                                            title: 'Secure by Design',
-                                            description: 'Data encryption, 2FA, and advanced user permissions keep your information safe.',
+                                            title: 'Sécurité des équipements',
+                                            description:
+                                                'Suivi précis de chaque ordinateur emprunté avec authentification des utilisateurs pour une traçabilité complète.',
                                         },
                                         {
-                                            icon: '🧩',
-                                            title: 'Modular & Scalable',
-                                            description: 'Customize it to your needs — add or remove features as your project grows.',
+                                            icon: '📅',
+                                            title: 'Calendrier des disponibilités',
+                                            description:
+                                                "Visualisation intuitive des créneaux d'emprunt et des ordinateurs disponibles pour une planification simplifiée.",
+                                        },
+                                        {
+                                            icon: '🔔 (En cours de dev)',
+                                            title: 'Alertes automatiques',
+                                            description: 'Notifications pour les retards de retour et rappels pour les réservations à venir.',
+                                        },
+                                        {
+                                            icon: '📝 (En cours de dev)',
+                                            title: "Fiche d'état numérique",
+                                            description:
+                                                "Validation de l'état du matériel avant/après emprunt avec signature électronique pour éviter les litiges.",
                                         },
                                     ].map((feature, index) => (
                                         <div
@@ -143,49 +160,21 @@ export default function Welcome() {
                             </section>
 
                             {/* Testimonials */}
-                            <section className="py-16">
-                                <div className="mx-auto max-w-3xl text-center">
-                                    <h2 className="text-3xl font-bold tracking-tight text-[#1b1b18] dark:text-white">What our users say</h2>
-                                    <p className="mt-4 text-lg text-[#1b1b18]/90 dark:text-white/80">
-                                        Don't just take our word for it - hear from our users.
-                                    </p>
-                                </div>
-                                <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-                                    {[
-                                        {
-                                            quote: "MyApp changed the way our team works. It's intuitive, fast, and saves us hours every week.",
-                                            author: 'Sarah, Project Manager',
-                                        },
-                                        {
-                                            quote: 'I love the clean UI and the flexibility. Setting it up was incredibly easy.',
-                                            author: 'Marc, Developer',
-                                        },
-                                    ].map((testimonial, index) => (
-                                        <div
-                                            key={index}
-                                            className="rounded-xl border border-white/20 bg-white/20 p-8 backdrop-blur-sm dark:border-white/10 dark:bg-black/20"
-                                        >
-                                            <p className="mb-6 text-lg text-[#1b1b18] italic dark:text-white/90">"{testimonial.quote}"</p>
-                                            <p className="font-semibold text-[#f53003] dark:text-[#FF4433]">— {testimonial.author}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
 
                             {/* CTA Section */}
                             <section className="py-16">
                                 <div className="rounded-xl bg-gradient-to-r from-blue-400/60 to-purple-500/60 p-8 backdrop-blur-sm sm:p-12">
                                     <div className="mx-auto max-w-3xl text-center">
-                                        <h2 className="text-3xl font-bold tracking-tight text-white">Ready to get started?</h2>
+                                        <h2 className="text-3xl font-bold tracking-tight text-white">Prêt à simplifier vos emprunts ?</h2>
                                         <p className="mt-4 text-lg text-white/90">
-                                            Join thousands of satisfied users and boost your productivity today.
+                                            Rejoignez les organisations qui gèrent leur parc informatique en toute sérénité.
                                         </p>
                                         <div className="mt-8">
                                             <Link
                                                 href={auth.user ? route('dashboard') : route('register')}
                                                 className="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-sm font-semibold text-[#f53003] shadow-sm hover:bg-gray-100 dark:text-[#FF4433]"
                                             >
-                                                Get started for free
+                                                Essai gratuit
                                             </Link>
                                         </div>
                                     </div>
