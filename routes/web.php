@@ -13,12 +13,10 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified', \App\Http\Middleware\IsAdmin::class])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard/dashboard');
-    })->name('dashboard');
-
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('account', [AccountController::class, 'index'])->name('account');
 });
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('reservation', function () {
