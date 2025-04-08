@@ -64,6 +64,11 @@ Migrer les données dans la BBD créer plus haut
 ```bash
 php artisan migrate
 ```
+9. **Génération du user Administrateur**
+Créer le user Admin grâce au seeder
+```bash
+php artisan db:seed
+```
 
 ### 🚀 Déploiement
 
