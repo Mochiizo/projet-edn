@@ -32,6 +32,26 @@ class ReservationController extends Controller
             'date_fin' => 'required|date|after_or_equal:date_debut',
         ]);
 
+        // Vérifier si le pack est déjà réservé pendant cette période
+        $packDéjàPris = Emprunt::where('pack_id', $validated['pack_id'])
+            ->where(function ($query) use ($validated) {
+                $query
+                    ->whereBetween('date_debut', [$validated['date_debut'], $validated['date_fin']])
+                    ->orWhereBetween('date_fin', [$validated['date_debut'], $validated['date_fin']])
+                    ->orWhere(function ($q) use ($validated) {
+                        $q->where('date_debut', '<=', $validated['date_debut'])
+                            ->where('date_fin', '>=', $validated['date_fin']);
+                    });
+            })
+            ->where('status', '!=', 'rendu') // ne pas tenir compte des packs déjà rendus
+            ->exists();
+
+        if ($packDéjàPris) {
+            return redirect()->back()->withErrors([
+                'pack_id' => 'Ce pack est déjà réservé sur cette période.',
+            ]);
+        }
+
         Emprunt::create([
             'user_id' => Auth::id(),
             'pack_id' => $validated['pack_id'],
@@ -42,6 +62,7 @@ class ReservationController extends Controller
 
         return redirect()->route('reservation.index')->with('success', 'Réservation enregistrée avec succès.');
     }
+
 
     public function rendre($id): RedirectResponse
     {
