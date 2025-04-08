@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Emprunt;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-
 
 class ReservationController extends Controller
 {
@@ -15,11 +14,13 @@ class ReservationController extends Controller
     {
         $reservations = Emprunt::with('pack')
             ->where('user_id', Auth::id())
-            ->latest()
+            ->orderByDesc('date_debut')
             ->get();
 
         return Inertia::render('reservation/reservation', [
             'reservations' => $reservations,
+            'csrf_token' => csrf_token()
+
         ]);
     }
 
@@ -36,10 +37,17 @@ class ReservationController extends Controller
             'pack_id' => $validated['pack_id'],
             'date_debut' => $validated['date_debut'],
             'date_fin' => $validated['date_fin'],
-            'status' => 'en cours', // si tu veux suivre l'état de la réservation
+            'status' => 'en cours',
         ]);
 
-        //return redirect('/reservation')->with('success', 'Réservation enregistrée');
         return redirect()->route('reservation.index')->with('success', 'Réservation enregistrée avec succès.');
+    }
+
+    public function rendre($id): RedirectResponse
+    {
+        $emprunt = Emprunt::where('user_id', Auth::id())->findOrFail($id);
+        $emprunt->update(['status' => 'rendu']);
+
+        return redirect()->route('reservation.index')->with('success', 'Le pack a bien été rendu.');
     }
 }

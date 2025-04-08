@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import AppLayout from '@/layouts/app-layout';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, CheckCircle2Icon, RotateCwIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -29,8 +29,9 @@ export default function Reservation() {
         date_fin: null as string | null,
     });
 
-    const { props } = usePage<{ reservations: Emprunt[] }>();
+    const { props } = usePage<{ reservations: Emprunt[], csrf_token: string }>();
     const reservations = props.reservations;
+    const csrfToken = props.csrf_token;
 
     const [packs, setPacks] = useState<Pack[]>([]);
     const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
@@ -313,34 +314,43 @@ export default function Reservation() {
                         </form>
                     </div>
 
-                    {/* Historique des réservations */}
-                    <div className="border-border dark:border-sidebar-border rounded-xl border bg-white p-4 shadow-sm dark:bg-black/20">
-                        <h2 className="mb-3 text-lg font-semibold">Mes réservations</h2>
-                        <ul className="space-y-3">
-                            {reservations.length > 0 ? (
-                                reservations.map((r) => (
-                                    <li key={r.id} className="border-muted flex items-center gap-4 rounded-lg border p-3">
-                                        {r.status === 'en cours' ? (
-                                            <span className="text-yellow-400">🕒</span>
-                                        ) : (
-                                            <span className="text-green-500">✅</span>
-                                        )}
-                                        <div>
-                                            <p className="font-semibold">{r.pack.nom}</p>
-                                            <p className="text-muted-foreground text-sm">
-                                                {new Date(r.date_debut).toLocaleDateString()} → {new Date(r.date_fin).toLocaleDateString()}
-                                            </p>
-                                            <p className={`mt-1 text-xs ${r.status === 'en cours' ? 'text-yellow-500' : 'text-green-500'}`}>
-                                                {r.status}
-                                            </p>
-                                        </div>
-                                    </li>
-                                ))
-                            ) : (
-                                <li className="text-muted-foreground text-sm">Aucune réservation trouvée.</li>
-                            )}
-                        </ul>
+{/* Historique des réservations */}
+<div className="border-border dark:border-sidebar-border rounded-xl border bg-white p-4 shadow-sm dark:bg-black/20">
+    <h2 className="mb-3 text-lg font-semibold">Mes réservations</h2>
+    <ul className="space-y-3">
+        {reservations.length > 0 ? (
+            reservations.map((r) => (
+                <li key={r.id} className="flex items-center justify-between gap-4 rounded-lg border border-muted p-3">
+                    <div className="flex items-center gap-4">
+                        {r.status === 'en cours' ? (
+                            <RotateCwIcon className="text-yellow-400 w-5 h-5" />
+                        ) : (
+                            <CheckCircle2Icon className="text-green-500 w-5 h-5" />
+                        )}
+                        <div>
+                            <p className="font-semibold">{r.pack.nom}</p>
+                            <p className="text-sm text-muted-foreground">
+                                {new Date(r.date_debut).toLocaleDateString()} → {new Date(r.date_fin).toLocaleDateString()}
+                            </p>
+                            <p className={`text-xs mt-1 ${r.status === 'en cours' ? 'text-yellow-500' : 'text-green-500'}`}>{r.status}</p>
+                        </div>
                     </div>
+                    {r.status === 'en cours' && (
+                        <form method="post" action={`/reservation/${r.id}/rendre`}>
+                            <input type="hidden" name="_method" value="PATCH" />
+                            <input type="hidden" name="_token" value={csrfToken} />
+                            <Button type="submit" size="icon" className="bg-blue-500 hover:bg-blue-600 text-white">
+                                <CheckCircle2Icon className="w-4 h-4" />
+                            </Button>
+                        </form>
+                    )}
+                </li>
+            ))
+        ) : (
+            <li className="text-sm text-muted-foreground">Aucune réservation trouvée.</li>
+        )}
+    </ul>
+</div>
                 </div>
             </div>
         </AppLayout>

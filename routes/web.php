@@ -7,6 +7,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\PackController;
 use App\Http\Controllers\DashboardController;
 
+
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
@@ -28,13 +29,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
     Route::post('/reservation', [ReservationController::class, 'store'])->name('reservation.store');
+    Route::patch('/reservation/{id}/rendre', [ReservationController::class, 'rendre'])->name('reservation.rendre');
 });
 
-/*
-Route::middleware(['auth'])->group(function () {
-    Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.index');
-    Route::post('/reservation/{pack}', [ReservationController::class, 'store'])->name('reservation.store');
-});*/
 
 
 Route::get('/packs', [PackController::class, 'index']);
