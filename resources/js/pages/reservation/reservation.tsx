@@ -29,12 +29,18 @@ export default function Reservation() {
         date_fin: null as string | null,
     });
 
-    const { props } = usePage<{ reservations: Emprunt[], csrf_token: string }>();
+    const { props } = usePage<{ reservations: Emprunt[], csrf_token: string, success?: string }>();
     const reservations = props.reservations;
     const csrfToken = props.csrf_token;
 
     const [packs, setPacks] = useState<Pack[]>([]);
     const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
+
+    useEffect(() => {
+        if (props.success) {
+            toast.success(props.success);
+        }
+    }, [props.success]);
 
     // Charger tous les packs
     useEffect(() => {
