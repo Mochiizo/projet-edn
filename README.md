@@ -50,9 +50,6 @@ copy .env.example .env
 ```
 Et changer le nom de DB_DATABASE = projetedndb
 
-6. **Créer la DB**
-Ouvrir phpmyadmin, créer une nouvelle base et la nommer projetedndb
-
 7. **Génération de clé d'application**
 Dans le cmd du projet
 ```bash
@@ -60,7 +57,7 @@ php artisan key:generate
 ```
 
 8. **Les migrations**
-Migrer les données dans la BBD créer plus haut
+Grâce à la migration, ça va créer la base de donnée, créer les tables et migrer les données dans la BBD créer plus haut
 ```bash
 php artisan migrate
 ```
